@@ -4,7 +4,7 @@ src/eeg_generator/__init__.py
 src/eeg_generator/async_stream.py
 src/eeg_generator/generators.py
 src/eeg_generator/real_data.py
-src/eeg_generator/usage.py
+src/eeg_generator/visualization.py
 src/eeg_generator.egg-info/PKG-INFO
 src/eeg_generator.egg-info/SOURCES.txt
 src/eeg_generator.egg-info/dependency_links.txt

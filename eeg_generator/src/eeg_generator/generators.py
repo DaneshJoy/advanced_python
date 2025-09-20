@@ -18,7 +18,6 @@ def generate_eeg(n_channel: int = 4, sampling_rate: int = 10, duration: int = 1)
     for _ in range(n_samples):
         channel_data = [random.gauss(0, 1) for _ in range(n_channel)]
         yield channel_data
-        yield '-'*35
         time.sleep(1/sampling_rate)
 
 
