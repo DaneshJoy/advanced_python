@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from typing import List, Optional, Iterable
+from IPython.display import display, clear_output
 
 
 def plot_eeg_samples(
@@ -29,6 +30,16 @@ def plot_eeg_samples(
     plt.show()
     return fig
 
+def in_notebook():
+    try:
+        from IPython import get_ipython
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True
+        else:
+            return False
+    except (ImportError, NameError):
+        return False
 
 def live_plot_stream(
     stream: Iterable[List[float]],
@@ -36,7 +47,10 @@ def live_plot_stream(
     n_channels: int,
     buffer_size: int = 100
 ):
-
+    notebook_mode = in_notebook()
+    if not notebook_mode:
+        plt.ion()
+    
     channel_labels = [f'Ch-{i + 1}' for i in range(n_channels)]
 
     fig, axes = plt.subplots(len(channel_labels), 1, figsize=(10, 2*len(channel_labels)), sharex=True)
@@ -55,21 +69,32 @@ def live_plot_stream(
     plt.tight_layout()
     
     sample_count = 0
-    for sample in stream:
-        data = np.roll(data, -1, axis=1)
-        current_time_end = sample_count / sampling_rate
-        times = np.linspace(
-            max(0, current_time_end - buffer_size / sampling_rate),
-            current_time_end,
-            buffer_size)
-        for ch in range(n_channels):
-            data[ch, -1] = sample[ch]
-            lines[ch].set_data(times, data[ch])
-            axes[ch].relim()
-            axes[ch].autoscale_view()
-            
-        sample_count += 1
-        
-        plt.draw()
-        plt.pause(0.01)
-    # plt.show()
+    try:
+        for sample in stream:
+            data = np.roll(data, -1, axis=1)
+            current_time_end = sample_count / sampling_rate
+            times = np.linspace(
+                max(0, current_time_end - buffer_size / sampling_rate),
+                current_time_end,
+                buffer_size)
+            for ch in range(n_channels):
+                data[ch, -1] = sample[ch]
+                lines[ch].set_data(times, data[ch])
+                axes[ch].relim()
+                axes[ch].autoscale_view()
+                
+            sample_count += 1
+
+            if notebook_mode:
+                clear_output(wait=True)
+                display(fig)
+            else:
+                plt.draw()
+                plt.pause(0.01)
+    except Exception as e:
+        print("Error occurred while streaming:", e)
+    finally:
+        if not notebook_mode:
+            plt.ioff()
+            plt.show(block=True)
+            # plt.close(fig)
