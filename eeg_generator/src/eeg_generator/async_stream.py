@@ -40,3 +40,5 @@ async def run_async_pubsub(n_channel=4, sampling_rate=10,
 
 if __name__ == "__main__":
     asyncio.run(run_async_pubsub(duration=1, n_consumers=2))
+
+

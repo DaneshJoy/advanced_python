@@ -1,4 +1,30 @@
-__pycache__
-*.egg-info
-.venv
-.vscode
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Installer logs
+pip-wheel-metadata/
+*.egg
+
+# IDEs/editors
+.vscode/
+.idea/
+*.swp
+
+# Testing / coverage
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
