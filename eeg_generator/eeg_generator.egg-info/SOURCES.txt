@@ -1,8 +1,0 @@
-README.md
-main.py
-pyproject.toml
-eeg_generator.egg-info/PKG-INFO
-eeg_generator.egg-info/SOURCES.txt
-eeg_generator.egg-info/dependency_links.txt
-eeg_generator.egg-info/requires.txt
-eeg_generator.egg-info/top_level.txt
