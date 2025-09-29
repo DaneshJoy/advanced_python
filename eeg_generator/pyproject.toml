@@ -1,14 +1,15 @@
 [project]
 name = "eeg-generator"
-version = "0.1.0"
+version = "0.1.3"
 description = "A Python package for generating simulated EEG signals with real-time streaming capabilities"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "matplotlib>=3.10.6",
     "mne>=1.10.1",
-    "numpy>=2.3.3",
     "scipy>=1.16.2",
+    "numpy>=2.2",
+    "ipykernel>=6.30.1",
 ]
 
 [dependency-groups]

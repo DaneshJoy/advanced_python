@@ -1,0 +1,9 @@
+2025-09-29 18:26:33 INFO [__main__] start generator
+2025-09-29 18:26:33 INFO [__main__] sample 0
+2025-09-29 18:26:33 INFO [__main__] sample 1
+2025-09-29 18:32:27 DEBUG [__main__] creating sample 0
+2025-09-29 18:32:27 INFO [__main__] Sample info message
+2025-09-29 18:32:27 DEBUG [__main__] creating sample 1
+2025-09-29 18:32:27 INFO [__main__] Sample info message
+2025-09-29 18:32:27 DEBUG [__main__] creating sample 2
+2025-09-29 18:32:27 INFO [__main__] Sample info message
