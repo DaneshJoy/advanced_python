@@ -20,8 +20,9 @@ def log_execution(func):
         start_time = time.time()
         result = func(*args, **kwargs)
         elapsed = time.time() - start_time
-        print(F"Completed {func.__name__} in {elapsed:.2f}s")
+        print(f"Completed {func.__name__} in {elapsed:.2f}s")
         return result
+
     return wrapper
 
 
@@ -29,30 +30,36 @@ def log_execution(func):
 def load_data(file_path: str) -> pd.DataFrame:
     arff_data = arff.loadarff(file_path)
     df = pd.DataFrame(arff_data[0])
-    df['eyeDetection'] = df['eyeDetection'].apply(lambda x: int(x.decode('utf-8')))
+    df["eyeDetection"] = df["eyeDetection"].apply(lambda x: int(x.decode("utf-8")))
     return df
 
 
-def visualize_data(df: pd.DataFrame, range: List=[3000, 6000]):
-    df.iloc[:, :].plot()
+def visualize_data(df: pd.DataFrame, range: List = [3000, 6000]):
+    df.iloc[range, :].plot()
     plt.show()
 
 
 @log_execution
-def prepare_data(df: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    X = df.drop('eyeDetection', axis=1)
-    y = df['eyeDetection']
+def prepare_data(
+    df: pd.DataFrame,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    X = df.drop("eyeDetection", axis=1)
+    y = df["eyeDetection"]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, stratify=y, random_state=42
+    )
 
     return X_train, X_test, y_train, y_test
 
 
 @log_execution
 def train_model(X_train: np.ndarray, y_train: np.ndarray):
-    model = RandomForestClassifier(n_estimators=100, criterion='entropy', n_jobs=-1, random_state=42)
+    model = RandomForestClassifier(
+        n_estimators=100, criterion="entropy", n_jobs=-1, random_state=42
+    )
     model.fit(X_train, y_train)
-    
+
     return model
 
 
@@ -60,25 +67,27 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray):
 def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    class_report = classification_report(y_test, y_pred, target_names=['Open', 'Closed'])
+    class_report = classification_report(
+        y_test, y_pred, target_names=["Open", "Closed"]
+    )
     conf_matrix = confusion_matrix(y_test, y_pred)
-    
-    print(f"Model Accuracy: {accuracy*100:.2f}%")
+
+    print(f"Model Accuracy: {accuracy * 100:.2f}%")
     print(f"Classification Report:\n{class_report}")
     print(f"Confusion Matrix:\n{conf_matrix}")
-    
-    ConfusionMatrixDisplay.from_predictions(y_test, y_pred,
-                                            display_labels=model.classes_,
-                                            cmap=plt.cm.Blues)
+
+    ConfusionMatrixDisplay.from_predictions(
+        y_test, y_pred, display_labels=model.classes_, cmap=plt.cm.Blues
+    )
     plt.show()
-    
+
     return {
-        'predictions': y_pred,
-        'accuracy': accuracy,
-        'classification_report': class_report,
-        'Confusion Matrix': conf_matrix
+        "predictions": y_pred,
+        "accuracy": accuracy,
+        "classification_report": class_report,
+        "Confusion Matrix": conf_matrix,
     }
-    
+
 
 @log_execution
 def save_model(model, filepath: str):
@@ -86,23 +95,23 @@ def save_model(model, filepath: str):
 
 
 @log_execution
-def load_model(filepath:str):
+def load_model(filepath: str):
     model = joblib.load(filepath)
     return model
 
 
 def main():
-    file_path = 'data/EEG Eye State.arff'
+    file_path = "data/EEG Eye State.arff"
     data = load_data(file_path)
     visualize_data(data)
-    # X_train, X_test, y_train, y_test = prepare_data(data)
-    # model = train_model(X_train, y_train)
-    # evaluate_model(model, X_test, y_test)
-    # save_model(model, 'model.pkl')
-    
+    X_train, X_test, y_train, y_test = prepare_data(data)
+    model = train_model(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
+    save_model(model, "model.pkl")
+
     # model_loaded = load_model('model.pkl')
     # evaluate_model(model_loaded, X_test, y_test)
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
