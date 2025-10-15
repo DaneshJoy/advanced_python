@@ -28,3 +28,6 @@ pip-wheel-metadata/
 .cache
 .pytest_cache/
 htmlcov/
+
+# Scikit-learn model
+*.pkl
