@@ -33,3 +33,6 @@ htmlcov/
 *.pkl
 *.log
 *.png
+
+# Gradio files
+.gradio/
