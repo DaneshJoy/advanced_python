@@ -31,3 +31,5 @@ htmlcov/
 
 # Scikit-learn model
 *.pkl
+*.log
+*.png
